@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Chatbot🤖</title>
+<style>
+body { 
+	color: #421; font-weight: bold; font-size: 18px; background:rgb(27,26,29); 
+	background-image: url("chat1.png"); background-repeat: repeat-y; 
+}
+span { 
+	color: rgb(223, 60, 60); 
+} 
+::-webkit-input-placeholder { 
+	color:aliceblue;
+}
+#main { 
+	position: fixed; top: 30%; right: 60px; width: 200px; 
+	border: 0px solid #421; padding: 40px; color : aliceblue; 
+}
+#main div { 
+	margin: 10px; 
+} 
+#input { 
+	border: 0; background:gray; padding: 5px; border: 1px solid #421; 
+}
+</style>
+</head>
+<body>
+<div id="main">
+	<div>USER🧔: <span id="user"></span></div>
+	<div>CHATBOT🤖: <span id="chatbot"></span></div>
+	<div><input id="input" type="text" placeholder="Ask Anything..." autocomplete="off"/></div>
+</div>
+<script type="text/javascript">
+var trigger = [
+	["hi","hey","hello"], 
+	["who is student one", "details of student one", "student one"],
+	["who is student two", "details of student two", "student two"],
+	["cgpa of student one","student one cgpa","cgpa one"],
+	["cgpa of student two","student two cgpa","cgpa two"],
+	["attendance of student one","student one attendance","attendance one"],
+	["attendance of student two","student two attendance","attendance two"],
+	["details of student one","student one details","details one"],
+	["details of student two","student two details","details two"],
+	["student chapter of student one","student one joined in"],
+	["student chapter of student two","student two joined in"],
+	["thanks", "thank you"],
+	["bye", "good bye", "goodbye", "see you later"]
+];
+var reply = [
+	["Hi","Hey","Hello"], 
+	["Nidhish Sharma Roll 37"],//"Nidhish Sharma Roll 37", "Niddy Roll 37"],
+	["Biswajit Sarangi roll 56"],
+	["9.08"],
+	["9.61"],
+	["94%"],
+	["98%"],
+	["Nidhish Sharma 37 B4 3/4 9985601841"],
+	["Biswajit Sarangi 56 B4 2/4 9985601851"],
+	["ACM"],
+	["CSI"],
+	["You are welcome"],
+	["Bye", "Goodbye", "See you later"]
+];
+var alternative = ["Haha...", "Eh..."];
+document.querySelector("#input").addEventListener("keypress", function(e){
+	var key = e.which || e.keyCode;
+	if(key === 13){ //Enter button
+		var input = document.getElementById("input").value;
+		document.getElementById("user").innerHTML = input;
+		output(input);
+	}
+});
+function output(input){
+	try{
+		var product = input + "=" + eval(input);
+	} catch(e){
+		var text = (input.toLowerCase()).replace(/[^\w\s\d]/gi, ""); //remove all chars except words, space and 
+		text = text.replace(/ a /g, " ").replace(/i feel /g, "").replace(/whats/g, "what is").replace(/please /g, "").replace(/ please/g, "");
+		if(compare(trigger, reply, text)){
+			var product = compare(trigger, reply, text);
+		} else {
+			var product = alternative[Math.floor(Math.random()*alternative.length)];
+		}
+	}
+	document.getElementById("chatbot").innerHTML = product;
+	speak(product);
+	document.getElementById("input").value = ""; //clear input value
+}
+function compare(arr, array, string){
+	var item;
+	for(var x=0; x<arr.length; x++){
+		for(var y=0; y<array.length; y++){
+			if(arr[x][y] == string){
+				items = array[x];
+				item =  items[Math.floor(Math.random()*items.length)];
+			}
+		}
+	}
+	return item;
+}
+function speak(string){
+	var utterance = new SpeechSynthesisUtterance();
+	utterance.voice = speechSynthesis.getVoices().filter(function(voice){return voice.name == "Agnes";})[0];
+	utterance.text = string;
+	utterance.lang = "en-US";
+	utterance.volume = 1; //0-1 interval
+	utterance.rate = 1;
+	utterance.pitch = 2; //0-2 interval
+	speechSynthesis.speak(utterance);
+}
+</script>
+</body>
+</html>
